@@ -1,1 +1,1312 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة التعليم الذكية</title><!-- Bootstrap RTL CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet"><!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><!-- Google Fonts Arabic -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&amp;display=swap" rel="stylesheet"><!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script><!-- Element SDK -->
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .main-wrapper {
+            min-height: 100%;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-y: auto;
+        }
+        
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section {
+            padding: 60px 20px;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .course-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .course-desc {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .dashboard-sidebar {
+            background: white;
+            min-height: 100vh;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .dashboard-content {
+            padding: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .lesson-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-right: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .lesson-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar-custom {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .badge-custom {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .admin-nav-item {
+            padding: 12px 20px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+        }
+        
+        .admin-nav-item:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+        
+        .admin-nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .content-editor {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .student-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+        }
+        
+        .status-connected {
+            color: #28a745;
+        }
+        
+        .status-disconnected {
+            color: #dc3545;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .grade-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 3px;
+        }
+        
+        .grade-1 { background: #e3f2fd; color: #1976d2; }
+        .grade-2 { background: #f3e5f5; color: #7b1fa2; }
+        .grade-3 { background: #e8f5e9; color: #388e3c; }
+        .grade-4 { background: #fff3e0; color: #f57c00; }
+        .grade-5 { background: #fce4ec; color: #c2185b; }
+        .grade-6 { background: #e0f2f1; color: #00796b; }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="main-wrapper"><!-- Navbar -->
+   <nav class="navbar navbar-expand-lg navbar-custom" id="mainNavbar">
+    <div class="container-fluid"><a class="navbar-brand fw-bold" href="#" style="color: #667eea;"> <i class="fas fa-graduation-cap ms-2"></i> <span id="platformTitle">منصة التعليم الذكية</span> </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"> <span class="navbar-toggler-icon"></span> </button>
+     <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+       <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('home')">الرئيسية</a></li>
+       <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('courses')">الدورات</a></li>
+      </ul>
+      <div class="d-flex"><button class="btn btn-primary-custom" onclick="showSection('login')" id="loginBtn"> <i class="fas fa-sign-in-alt ms-2"></i> تسجيل الدخول </button> <button class="btn btn-outline-danger hidden" onclick="logout()" id="logoutBtn"> <i class="fas fa-sign-out-alt ms-2"></i> تسجيل الخروج </button>
+      </div>
+     </div>
+    </div>
+   </nav><!-- Home Section -->
+   <section id="homeSection" class="hero-section">
+    <div class="container">
+     <h1 class="hero-title" id="heroTitle">منصة التعليم الذكية</h1>
+     <p class="hero-subtitle" id="heroSubtitle">تعلم البرمجة والذكاء الاصطناعي وتحليل البيانات والرياضيات</p>
+     <p class="mt-4 fs-5" id="welcomeMessage">ابدأ رحلتك التعليمية معنا اليوم</p><button class="btn btn-primary-custom btn-lg mt-4" onclick="showSection('courses')"> <i class="fas fa-book-open ms-2"></i> استكشف الدورات </button>
+    </div>
+   </section><!-- Courses Section -->
+   <section id="coursesSection" class="hidden">
+    <div class="container py-5">
+     <h2 class="text-white text-center mb-5 fw-bold">دوراتنا التعليمية</h2>
+     <div class="row"><!-- Programming Course -->
+      <div class="col-md-6 col-lg-3">
+       <div class="course-card" onclick="selectCourse('programming')">
+        <div class="course-icon"><i class="fas fa-code"></i>
+        </div>
+        <h3 class="course-title">البرمجة</h3>
+        <p class="course-desc">تعلم أساسيات البرمجة بلغات Python و JavaScript</p><span class="badge bg-success badge-custom">12 درس</span> <span class="badge bg-info badge-custom">مبتدئ</span>
+       </div>
+      </div><!-- AI Course -->
+      <div class="col-md-6 col-lg-3">
+       <div class="course-card" onclick="selectCourse('ai')">
+        <div class="course-icon"><i class="fas fa-robot"></i>
+        </div>
+        <h3 class="course-title">الذكاء الاصطناعي</h3>
+        <p class="course-desc">اكتشف عالم الذكاء الاصطناعي والتعلم الآلي</p><span class="badge bg-success badge-custom">15 درس</span> <span class="badge bg-warning badge-custom">متقدم</span>
+       </div>
+      </div><!-- Data Analysis Course -->
+      <div class="col-md-6 col-lg-3">
+       <div class="course-card" onclick="selectCourse('data')">
+        <div class="course-icon"><i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="course-title">تحليل البيانات</h3>
+        <p class="course-desc">تعلم تحليل وتصور البيانات باستخدام أدوات احترافية</p><span class="badge bg-success badge-custom">10 دروس</span> <span class="badge bg-info badge-custom">متوسط</span>
+       </div>
+      </div><!-- Math Course -->
+      <div class="col-md-6 col-lg-3">
+       <div class="course-card" onclick="selectCourse('math')">
+        <div class="course-icon"><i class="fas fa-calculator"></i>
+        </div>
+        <h3 class="course-title">رياضيات ابتدائي</h3>
+        <p class="course-desc">رياضيات تفاعلية للصفوف 1-6</p><span class="badge bg-success badge-custom">36 درس</span> <span class="badge bg-info badge-custom">جميع المستويات</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Course Content Section -->
+   <section id="courseContentSection" class="hidden">
+    <div class="container py-5">
+     <div class="row">
+      <div class="col-12">
+       <div class="content-editor"><button class="btn btn-outline-secondary mb-4" onclick="showSection('courses')"> <i class="fas fa-arrow-right ms-2"></i> رجوع للدورات </button>
+        <div id="courseContentArea"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Login Section -->
+   <section id="loginSection" class="hidden">
+    <div class="container">
+     <div class="login-container">
+      <h2 class="text-center mb-4" style="color: #667eea;"><i class="fas fa-user-circle ms-2"></i> تسجيل الدخول</h2>
+      <div id="firebaseConfigAlert" class="alert alert-warning text-center"><i class="fas fa-exclamation-triangle ms-2"></i> يرجى إضافة إعدادات Firebase في الكود
+      </div>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+       <div class="mb-3"><label class="form-label">البريد الإلكتروني</label> <input type="email" class="form-control" id="emailInput" required placeholder="student@example.com">
+       </div>
+       <div class="mb-3"><label class="form-label">كلمة المرور</label> <input type="password" class="form-control" id="passwordInput" required placeholder="••••••••">
+       </div>
+       <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="adminCheck"> <label class="form-check-label" for="adminCheck"> تسجيل دخول كمدير </label>
+       </div><button type="submit" class="btn btn-primary-custom w-100 mb-3"> <i class="fas fa-sign-in-alt ms-2"></i> دخول </button> <button type="button" class="btn btn-outline-secondary w-100" onclick="handleSignup()"> <i class="fas fa-user-plus ms-2"></i> إنشاء حساب جديد </button>
+      </form>
+     </div>
+    </div>
+   </section><!-- Student Dashboard -->
+   <section id="studentDashboard" class="hidden">
+    <div class="container-fluid">
+     <div class="row">
+      <div class="col-12">
+       <div class="dashboard-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+         <h2 class="text-white fw-bold"><i class="fas fa-chart-line ms-2"></i> لوحة التحكم الخاصة بك</h2><span class="badge bg-light text-dark" id="studentName">الطالب</span>
+        </div>
+        <div class="row">
+         <div class="col-md-3">
+          <div class="stat-card">
+           <div class="stat-icon text-primary"><i class="fas fa-book-open"></i>
+           </div>
+           <div class="stat-number" id="enrolledCourses">
+            4
+           </div>
+           <div class="stat-label">
+            دورات مسجلة
+           </div>
+          </div>
+         </div>
+         <div class="col-md-3">
+          <div class="stat-card">
+           <div class="stat-icon text-success"><i class="fas fa-check-circle"></i>
+           </div>
+           <div class="stat-number" id="completedLessons">
+            12
+           </div>
+           <div class="stat-label">
+            دروس مكتملة
+           </div>
+          </div>
+         </div>
+         <div class="col-md-3">
+          <div class="stat-card">
+           <div class="stat-icon text-warning"><i class="fas fa-clock"></i>
+           </div>
+           <div class="stat-number" id="studyHours">
+            48
+           </div>
+           <div class="stat-label">
+            ساعات دراسة
+           </div>
+          </div>
+         </div>
+         <div class="col-md-3">
+          <div class="stat-card">
+           <div class="stat-icon text-danger"><i class="fas fa-trophy"></i>
+           </div>
+           <div class="stat-number" id="achievements">
+            8
+           </div>
+           <div class="stat-label">
+            إنجازات
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="row mt-4">
+         <div class="col-12">
+          <div class="content-editor">
+           <h4 class="mb-4">دوراتي</h4>
+           <div id="studentCoursesList"></div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Admin Dashboard -->
+   <section id="adminDashboard" class="hidden">
+    <div class="container-fluid">
+     <div class="row">
+      <div class="col-md-3">
+       <div class="dashboard-sidebar">
+        <h4 class="mb-4 fw-bold" style="color: #667eea;"><i class="fas fa-cog ms-2"></i> لوحة الإدارة</h4>
+        <div class="admin-nav-item active" onclick="showAdminTab('overview')"><i class="fas fa-home ms-2"></i> نظرة عامة
+        </div>
+        <div class="admin-nav-item" onclick="showAdminTab('students')"><i class="fas fa-users ms-2"></i> الطلاب
+        </div>
+        <div class="admin-nav-item" onclick="showAdminTab('content')"><i class="fas fa-edit ms-2"></i> إدارة المحتوى
+        </div>
+        <div class="admin-nav-item" onclick="showAdminTab('analytics')"><i class="fas fa-chart-bar ms-2"></i> التحليلات
+        </div>
+       </div>
+      </div>
+      <div class="col-md-9">
+       <div class="dashboard-content"><!-- Overview Tab -->
+        <div id="adminOverview" class="admin-tab-content">
+         <h2 class="text-white mb-4 fw-bold">نظرة عامة</h2>
+         <div class="row">
+          <div class="col-md-4">
+           <div class="stat-card">
+            <div class="stat-icon text-primary"><i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number">
+             156
+            </div>
+            <div class="stat-label">
+             إجمالي الطلاب
+            </div>
+           </div>
+          </div>
+          <div class="col-md-4">
+           <div class="stat-card">
+            <div class="stat-icon text-success"><i class="fas fa-book"></i>
+            </div>
+            <div class="stat-number">
+             4
+            </div>
+            <div class="stat-label">
+             الدورات المتاحة
+            </div>
+           </div>
+          </div>
+          <div class="col-md-4">
+           <div class="stat-card">
+            <div class="stat-icon text-warning"><i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="stat-number">
+             89
+            </div>
+            <div class="stat-label">
+             طالب نشط اليوم
+            </div>
+           </div>
+          </div>
+         </div>
+        </div><!-- Students Tab -->
+        <div id="adminStudents" class="admin-tab-content hidden">
+         <h2 class="text-white mb-4 fw-bold">إدارة الطلاب</h2>
+         <div class="student-table">
+          <table class="table table-hover">
+           <thead class="table-light">
+            <tr>
+             <th>الاسم</th>
+             <th>البريد الإلكتروني</th>
+             <th>الدورات</th>
+             <th>التقدم</th>
+             <th>الإجراءات</th>
+            </tr>
+           </thead>
+           <tbody id="studentsTableBody">
+            <tr>
+             <td>أحمد محمد</td>
+             <td>ahmed@example.com</td>
+             <td>3</td>
+             <td>
+              <div class="progress">
+               <div class="progress-bar progress-bar-custom" style="width: 75%">
+                75%
+               </div>
+              </div></td>
+             <td><button class="btn btn-sm btn-outline-primary">عرض</button></td>
+            </tr>
+            <tr>
+             <td>فاطمة علي</td>
+             <td>fatima@example.com</td>
+             <td>4</td>
+             <td>
+              <div class="progress">
+               <div class="progress-bar progress-bar-custom" style="width: 92%">
+                92%
+               </div>
+              </div></td>
+             <td><button class="btn btn-sm btn-outline-primary">عرض</button></td>
+            </tr>
+           </tbody>
+          </table>
+         </div>
+        </div><!-- Content Management Tab -->
+        <div id="adminContent" class="admin-tab-content hidden">
+         <h2 class="text-white mb-4 fw-bold">إدارة المحتوى التعليمي</h2>
+         <div class="content-editor">
+          <h5 class="mb-3">إضافة محتوى جديد</h5>
+          <form id="contentForm" onsubmit="handleAddContent(event)">
+           <div class="mb-3"><label class="form-label">اختر الدورة</label> <select class="form-control" id="courseSelect" required> <option value="">-- اختر الدورة --</option> <option value="programming">البرمجة</option> <option value="ai">الذكاء الاصطناعي</option> <option value="data">تحليل البيانات</option> <option value="math">رياضيات ابتدائي</option> </select>
+           </div>
+           <div class="mb-3"><label class="form-label">عنوان الدرس</label> <input type="text" class="form-control" id="lessonTitle" required placeholder="مثال: مقدمة في البرمجة">
+           </div>
+           <div class="mb-3"><label class="form-label">محتوى الدرس</label> <textarea class="form-control" id="lessonContent" rows="6" required placeholder="اكتب محتوى الدرس هنا..."></textarea>
+           </div>
+           <div class="mb-3"><label class="form-label">مدة الدرس (دقائق)</label> <input type="number" class="form-control" id="lessonDuration" required placeholder="30">
+           </div><button type="submit" class="btn btn-primary-custom"> <i class="fas fa-plus ms-2"></i> إضافة الدرس </button>
+          </form>
+          <hr class="my-4">
+          <h5 class="mb-3">المحتوى الحالي</h5>
+          <div id="currentContentList"></div>
+         </div>
+        </div><!-- Analytics Tab -->
+        <div id="adminAnalytics" class="admin-tab-content hidden">
+         <h2 class="text-white mb-4 fw-bold">التحليلات والإحصائيات</h2>
+         <div class="row">
+          <div class="col-md-6">
+           <div class="stat-card">
+            <h5 class="mb-3">الدورات الأكثر شعبية</h5>
+            <div class="mb-3">
+             <div class="d-flex justify-content-between mb-2"><span>البرمجة</span> <span>89 طالب</span>
+             </div>
+             <div class="progress">
+              <div class="progress-bar progress-bar-custom" style="width: 89%"></div>
+             </div>
+            </div>
+            <div class="mb-3">
+             <div class="d-flex justify-content-between mb-2"><span>الذكاء الاصطناعي</span> <span>76 طالب</span>
+             </div>
+             <div class="progress">
+              <div class="progress-bar progress-bar-custom" style="width: 76%"></div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="col-md-6">
+           <div class="stat-card">
+            <h5 class="mb-3">معدل الإكمال</h5>
+            <div class="text-center">
+             <div class="stat-number" style="color: #28a745;">
+              78%
+             </div>
+             <div class="stat-label">
+              معدل إكمال الدورات
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Firebase Status Indicator -->
+   <div class="firebase-status"><i class="fas fa-circle status-disconnected" id="firebaseStatusIcon"></i> <span id="firebaseStatusText">غير متصل</span>
+   </div>
+  </div><!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+        // ==================== Element SDK Configuration ====================
+        const defaultConfig = {
+            platform_title: "منصة التعليم الذكية",
+            platform_subtitle: "تعلم البرمجة والذكاء الاصطناعي وتحليل البيانات والرياضيات",
+            welcome_message: "ابدأ رحلتك التعليمية معنا اليوم",
+            primary_color: "#667eea",
+            secondary_color: "#764ba2",
+            background_gradient_start: "#667eea",
+            background_gradient_end: "#764ba2",
+            text_color: "#333333",
+            font_family: "Cairo",
+            font_size: 16
+        };
 
+        async function onConfigChange(config) {
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseSize = config.font_size || defaultConfig.font_size;
+            const primaryColor = config.primary_color || defaultConfig.primary_color;
+            const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+            const gradientStart = config.background_gradient_start || defaultConfig.background_gradient_start;
+            const gradientEnd = config.background_gradient_end || defaultConfig.background_gradient_end;
+            const textColor = config.text_color || defaultConfig.text_color;
+            
+            document.getElementById('platformTitle').textContent = config.platform_title || defaultConfig.platform_title;
+            document.getElementById('heroTitle').textContent = config.platform_title || defaultConfig.platform_title;
+            document.getElementById('heroSubtitle').textContent = config.platform_subtitle || defaultConfig.platform_subtitle;
+            document.getElementById('welcomeMessage').textContent = config.welcome_message || defaultConfig.welcome_message;
+            
+            const fontStack = `${customFont}, sans-serif`;
+            document.body.style.fontFamily = fontStack;
+            document.querySelectorAll('.hero-title').forEach(el => {
+                el.style.fontFamily = fontStack;
+                el.style.fontSize = `${baseSize * 1.875}px`;
+            });
+            document.querySelectorAll('.hero-subtitle').forEach(el => {
+                el.style.fontSize = `${baseSize * 1.0625}px`;
+            });
+            document.querySelectorAll('.course-title').forEach(el => {
+                el.style.fontSize = `${baseSize * 1.125}px`;
+                el.style.color = textColor;
+            });
+            
+            document.querySelector('.main-wrapper').style.background = `linear-gradient(135deg, ${gradientStart} 0%, ${gradientEnd} 100%)`;
+            document.querySelectorAll('.course-icon').forEach(el => {
+                el.style.color = primaryColor;
+            });
+            document.querySelectorAll('.btn-primary-custom').forEach(el => {
+                el.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+            });
+            document.querySelectorAll('.progress-bar-custom').forEach(el => {
+                el.style.background = `linear-gradient(90deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+            });
+            document.querySelectorAll('.admin-nav-item.active').forEach(el => {
+                el.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+            });
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [
+                        {
+                            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+                            set: (value) => {
+                                config.background_gradient_start = value;
+                                window.elementSdk.setConfig({ background_gradient_start: value });
+                            }
+                        },
+                        {
+                            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+                            set: (value) => {
+                                config.background_gradient_end = value;
+                                window.elementSdk.setConfig({ background_gradient_end: value });
+                            }
+                        },
+                        {
+                            get: () => config.text_color || defaultConfig.text_color,
+                            set: (value) => {
+                                config.text_color = value;
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.primary_color || defaultConfig.primary_color,
+                            set: (value) => {
+                                config.primary_color = value;
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.secondary_color || defaultConfig.secondary_color,
+                            set: (value) => {
+                                config.secondary_color = value;
+                                window.elementSdk.setConfig({ secondary_color: value });
+                            }
+                        }
+                    ],
+                    borderables: [],
+                    fontEditable: {
+                        get: () => config.font_family || defaultConfig.font_family,
+                        set: (value) => {
+                            config.font_family = value;
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    },
+                    fontSizeable: {
+                        get: () => config.font_size || defaultConfig.font_size,
+                        set: (value) => {
+                            config.font_size = value;
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["platform_title", config.platform_title || defaultConfig.platform_title],
+                    ["platform_subtitle", config.platform_subtitle || defaultConfig.platform_subtitle],
+                    ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+                ])
+            });
+        }
+
+        // ==================== Firebase Configuration ====================
+        // يرجى استبدال هذه القيم بإعدادات Firebase الخاصة بك
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        let firebaseInitialized = false;
+        let currentUser = null;
+
+        // Initialize Firebase
+        try {
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                firebase.initializeApp(firebaseConfig);
+                firebaseInitialized = true;
+                updateFirebaseStatus(true);
+                document.getElementById('firebaseConfigAlert').classList.add('hidden');
+            } else {
+                updateFirebaseStatus(false);
+            }
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+            updateFirebaseStatus(false);
+        }
+
+        // Monitor auth state
+        if (firebaseInitialized) {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    checkUserRole(user);
+                } else {
+                    currentUser = null;
+                    showSection('home');
+                }
+            });
+        }
+
+        function updateFirebaseStatus(connected) {
+            const icon = document.getElementById('firebaseStatusIcon');
+            const text = document.getElementById('firebaseStatusText');
+            
+            if (connected) {
+                icon.className = 'fas fa-circle status-connected';
+                text.textContent = 'متصل';
+            } else {
+                icon.className = 'fas fa-circle status-disconnected';
+                text.textContent = 'غير متصل';
+            }
+        }
+
+        // ==================== Course Content Data ====================
+        const coursesData = {
+            programming: {
+                title: "دورة البرمجة",
+                icon: "fa-code",
+                lessons: [
+                    {
+                        title: "مقدمة في البرمجة",
+                        content: "تعرف على أساسيات البرمجة ولماذا هي مهمة في العصر الحديث. البرمجة هي لغة المستقبل وأداة التغيير.",
+                        duration: 30
+                    },
+                    {
+                        title: "متغيرات وأنواع البيانات",
+                        content: "تعلم كيفية تخزين المعلومات في البرامج باستخدام المتغيرات. سنتعلم الأنواع المختلفة: النصوص، الأرقام، والمنطقية.",
+                        duration: 45
+                    },
+                    {
+                        title: "الشروط والحلقات",
+                        content: "اكتشف كيفية اتخاذ القرارات في البرمجة باستخدام if/else وكيفية تكرار العمليات باستخدام الحلقات.",
+                        duration: 60
+                    },
+                    {
+                        title: "الدوال Functions",
+                        content: "تعلم كيفية تنظيم الكود الخاص بك في وحدات قابلة لإعادة الاستخدام باستخدام الدوال.",
+                        duration: 50
+                    }
+                ]
+            },
+            ai: {
+                title: "دورة الذكاء الاصطناعي",
+                icon: "fa-robot",
+                lessons: [
+                    {
+                        title: "ما هو الذكاء الاصطناعي؟",
+                        content: "مقدمة شاملة عن الذكاء الاصطناعي وتطبيقاته في حياتنا اليومية من السيارات الذاتية القيادة إلى المساعدات الصوتية.",
+                        duration: 40
+                    },
+                    {
+                        title: "التعلم الآلي - الأساسيات",
+                        content: "تعرف على كيفية تعليم الآلات من البيانات وأنواع التعلم الآلي: الموجه وغير الموجه والتعزيزي.",
+                        duration: 55
+                    },
+                    {
+                        title: "الشبكات العصبية",
+                        content: "اكتشف كيف تحاكي الشبكات العصبية عمل الدماغ البشري وكيف تستخدم في التعرف على الصور والنصوص.",
+                        duration: 65
+                    },
+                    {
+                        title: "معالجة اللغة الطبيعية",
+                        content: "تعلم كيف يفهم الكمبيوتر اللغة البشرية ويتفاعل معها، من الترجمة الآلية إلى روبوتات المحادثة.",
+                        duration: 50
+                    }
+                ]
+            },
+            data: {
+                title: "دورة تحليل البيانات",
+                icon: "fa-chart-line",
+                lessons: [
+                    {
+                        title: "مقدمة في تحليل البيانات",
+                        content: "تعرف على أهمية البيانات في اتخاذ القرارات وكيف يمكن تحويل البيانات إلى معلومات قيمة.",
+                        duration: 35
+                    },
+                    {
+                        title: "جمع وتنظيف البيانات",
+                        content: "تعلم كيفية جمع البيانات من مصادر مختلفة وتنظيفها من الأخطاء والقيم المفقودة.",
+                        duration: 50
+                    },
+                    {
+                        title: "تصور البيانات",
+                        content: "اكتشف كيفية إنشاء رسوم بيانية وجداول تفاعلية لعرض البيانات بطريقة واضحة ومفهومة.",
+                        duration: 45
+                    },
+                    {
+                        title: "التحليل الإحصائي",
+                        content: "تعلم الأساليب الإحصائية لفهم البيانات واكتشاف الأنماط والعلاقات بين المتغيرات.",
+                        duration: 60
+                    }
+                ]
+            },
+            math: {
+                title: "رياضيات المرحلة الابتدائية",
+                icon: "fa-calculator",
+                grades: [
+                    {
+                        grade: "الصف الأول",
+                        lessons: [
+                            {title: "الأرقام من 1 إلى 10", content: "تعلم العد والتعرف على الأرقام من 1 إلى 10 بطريقة ممتعة.", duration: 25},
+                            {title: "الجمع البسيط", content: "تعلم جمع الأرقام الصغيرة باستخدام الصور والأمثلة التفاعلية.", duration: 30},
+                            {title: "الطرح البسيط", content: "فهم عملية الطرح من خلال أمثلة عملية ومرئية.", duration: 30},
+                            {title: "الأشكال الهندسية", content: "التعرف على الأشكال الأساسية: الدائرة، المربع، والمثلث.", duration: 25}
+                        ]
+                    },
+                    {
+                        grade: "الصف الثاني",
+                        lessons: [
+                            {title: "الأرقام حتى 100", content: "توسيع معرفتك بالأرقام والعد حتى المئة.", duration: 30},
+                            {title: "الجمع والطرح بالحمل", content: "تعلم الجمع والطرح مع الحمل والاستلاف.", duration: 35},
+                            {title: "مقدمة في الضرب", content: "فهم مفهوم الضرب كجمع متكرر.", duration: 40},
+                            {title: "القياس والمقارنة", content: "مقارنة الأطوال والأوزان والأحجام.", duration: 30}
+                        ]
+                    },
+                    {
+                        grade: "الصف الثالث",
+                        lessons: [
+                            {title: "جدول الضرب", content: "حفظ وفهم جداول الضرب من 1 إلى 10.", duration: 45},
+                            {title: "القسمة البسيطة", content: "تعلم القسمة كعملية عكسية للضرب.", duration: 40},
+                            {title: "الكسور البسيطة", content: "فهم مفهوم الكسور والنصف والربع.", duration: 35},
+                            {title: "المحيط والمساحة", content: "حساب محيط ومساحة الأشكال البسيطة.", duration: 40}
+                        ]
+                    },
+                    {
+                        grade: "الصف الرابع",
+                        lessons: [
+                            {title: "الأعداد الكبيرة", content: "التعامل مع الأعداد حتى الآلاف والملايين.", duration: 35},
+                            {title: "العمليات المركبة", content: "حل مسائل تتضمن أكثر من عملية حسابية.", duration: 45},
+                            {title: "الكسور العشرية", content: "فهم واستخدام الكسور العشرية في الحسابات.", duration: 40},
+                            {title: "الهندسة المتقدمة", content: "دراسة الزوايا والمثلثات والمضلعات.", duration: 40}
+                        ]
+                    },
+                    {
+                        grade: "الصف الخامس",
+                        lessons: [
+                            {title: "الكسور والنسب", content: "العمليات على الكسور والتحويل بين الكسور.", duration: 45},
+                            {title: "النسبة المئوية", content: "فهم واستخدام النسب المئوية في الحياة العملية.", duration: 40},
+                            {title: "الإحصاء الأساسي", content: "جمع البيانات وتنظيمها في جداول ورسوم.", duration: 35},
+                            {title: "المعادلات البسيطة", content: "حل معادلات جبرية بسيطة بمجهول واحد.", duration: 45}
+                        ]
+                    },
+                    {
+                        grade: "الصف السادس",
+                        lessons: [
+                            {title: "الأعداد الصحيحة", content: "التعامل مع الأعداد الموجبة والسالبة.", duration: 40},
+                            {title: "الجبر المتقدم", content: "حل معادلات ومسائل جبرية أكثر تعقيداً.", duration: 50},
+                            {title: "الهندسة التحليلية", content: "استخدام الإحداثيات ورسم الأشكال على المستوى.", duration: 45},
+                            {title: "الاحتمالات", content: "فهم الاحتمالات وحساب فرص وقوع الأحداث.", duration: 40}
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // ==================== Section Management ====================
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('homeSection').classList.add('hidden');
+            document.getElementById('coursesSection').classList.add('hidden');
+            document.getElementById('courseContentSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('studentDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            
+            // Show selected section
+            if (section === 'home') {
+                document.getElementById('homeSection').classList.remove('hidden');
+            } else if (section === 'courses') {
+                document.getElementById('coursesSection').classList.remove('hidden');
+            } else if (section === 'login') {
+                document.getElementById('loginSection').classList.remove('hidden');
+            } else if (section === 'student') {
+                document.getElementById('studentDashboard').classList.remove('hidden');
+                loadStudentProgress();
+            } else if (section === 'admin') {
+                document.getElementById('adminDashboard').classList.remove('hidden');
+            }
+        }
+
+        function selectCourse(courseType) {
+            if (!currentUser) {
+                showSection('login');
+                return;
+            }
+            
+            document.getElementById('courseContentSection').classList.remove('hidden');
+            document.getElementById('coursesSection').classList.add('hidden');
+            
+            const course = coursesData[courseType];
+            const contentArea = document.getElementById('courseContentArea');
+            
+            if (courseType === 'math') {
+                let html = `
+                    <div class="text-center mb-4">
+                        <i class="fas ${course.icon} fa-3x mb-3" style="color: #667eea;"></i>
+                        <h3 class="fw-bold">${course.title}</h3>
+                    </div>
+                `;
+                
+                course.grades.forEach((gradeData, index) => {
+                    html += `
+                        <div class="mb-4">
+                            <h4 class="mb-3">
+                                <span class="grade-badge grade-${index + 1}">${gradeData.grade}</span>
+                            </h4>
+                            <div class="row">
+                    `;
+                    
+                    gradeData.lessons.forEach((lesson, lessonIndex) => {
+                        html += `
+                            <div class="col-md-6 mb-3">
+                                <div class="lesson-item">
+                                    <h5>${lesson.title}</h5>
+                                    <p class="text-muted mb-2">${lesson.content}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-secondary">${lesson.duration} دقيقة</span>
+                                        <button class="btn btn-sm btn-primary-custom" onclick="startLesson('${courseType}', ${index}, ${lessonIndex})">
+                                            <i class="fas fa-play ms-1"></i>
+                                            ابدأ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                contentArea.innerHTML = html;
+            } else {
+                let html = `
+                    <div class="text-center mb-4">
+                        <i class="fas ${course.icon} fa-3x mb-3" style="color: #667eea;"></i>
+                        <h3 class="fw-bold">${course.title}</h3>
+                    </div>
+                    <div class="row">
+                `;
+                
+                course.lessons.forEach((lesson, index) => {
+                    html += `
+                        <div class="col-md-6 mb-3">
+                            <div class="lesson-item">
+                                <h5>الدرس ${index + 1}: ${lesson.title}</h5>
+                                <p class="text-muted mb-2">${lesson.content}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-secondary">${lesson.duration} دقيقة</span>
+                                    <button class="btn btn-sm btn-primary-custom" onclick="startLesson('${courseType}', 0, ${index})">
+                                        <i class="fas fa-play ms-1"></i>
+                                        ابدأ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+                contentArea.innerHTML = html;
+            }
+        }
+
+        function startLesson(courseType, gradeIndex, lessonIndex) {
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-success shadow-lg';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = '<i class="fas fa-check-circle ms-2"></i> تم بدء الدرس! جاري تسجيل التقدم...';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+            
+            if (firebaseInitialized && currentUser) {
+                const progressRef = firebase.database().ref(`progress/${currentUser.uid}/${courseType}`);
+                progressRef.push({
+                    gradeIndex,
+                    lessonIndex,
+                    timestamp: Date.now(),
+                    completed: false
+                });
+            }
+        }
+
+        // ==================== Authentication ====================
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const isAdmin = document.getElementById('adminCheck').checked;
+            
+            if (!firebaseInitialized) {
+                const toast = document.createElement('div');
+                toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-warning shadow-lg';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = '<i class="fas fa-exclamation-triangle ms-2"></i> يرجى إضافة إعدادات Firebase أولاً';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+                return;
+            }
+            
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    
+                    if (isAdmin) {
+                        firebase.database().ref(`users/${currentUser.uid}/role`).once('value')
+                            .then((snapshot) => {
+                                if (snapshot.val() === 'admin') {
+                                    showSection('admin');
+                                    updateNavButtons(true, true);
+                                } else {
+                                    const toast = document.createElement('div');
+                                    toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-danger shadow-lg';
+                                    toast.style.zIndex = '9999';
+                                    toast.innerHTML = '<i class="fas fa-times-circle ms-2"></i> ليس لديك صلاحيات المدير';
+                                    document.body.appendChild(toast);
+                                    setTimeout(() => toast.remove(), 3000);
+                                    firebase.auth().signOut();
+                                }
+                            });
+                    } else {
+                        showSection('student');
+                        updateNavButtons(true, false);
+                    }
+                })
+                .catch((error) => {
+                    const toast = document.createElement('div');
+                    toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-danger shadow-lg';
+                    toast.style.zIndex = '9999';
+                    toast.innerHTML = '<i class="fas fa-times-circle ms-2"></i> خطأ في تسجيل الدخول: ' + error.message;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 3000);
+                });
+        }
+
+        function handleSignup() {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            
+            if (!firebaseInitialized) {
+                const toast = document.createElement('div');
+                toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-warning shadow-lg';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = '<i class="fas fa-exclamation-triangle ms-2"></i> يرجى إضافة إعدادات Firebase أولاً';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+                return;
+            }
+            
+            if (!email || !password) {
+                const toast = document.createElement('div');
+                toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-warning shadow-lg';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = '<i class="fas fa-exclamation-triangle ms-2"></i> يرجى ملء جميع الحقول';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+                return;
+            }
+            
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    
+                    firebase.database().ref(`users/${currentUser.uid}`).set({
+                        email: email,
+                        role: 'student',
+                        createdAt: Date.now()
+                    });
+                    
+                    const toast = document.createElement('div');
+                    toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-success shadow-lg';
+                    toast.style.zIndex = '9999';
+                    toast.innerHTML = '<i class="fas fa-check-circle ms-2"></i> تم إنشاء الحساب بنجاح!';
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 3000);
+                    
+                    showSection('student');
+                    updateNavButtons(true, false);
+                })
+                .catch((error) => {
+                    const toast = document.createElement('div');
+                    toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-danger shadow-lg';
+                    toast.style.zIndex = '9999';
+                    toast.innerHTML = '<i class="fas fa-times-circle ms-2"></i> خطأ: ' + error.message;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 3000);
+                });
+        }
+
+        function logout() {
+            if (firebaseInitialized) {
+                firebase.auth().signOut().then(() => {
+                    currentUser = null;
+                    showSection('home');
+                    updateNavButtons(false, false);
+                    
+                    const toast = document.createElement('div');
+                    toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-info shadow-lg';
+                    toast.style.zIndex = '9999';
+                    toast.innerHTML = '<i class="fas fa-info-circle ms-2"></i> تم تسجيل الخروج بنجاح';
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 3000);
+                });
+            }
+        }
+
+        function updateNavButtons(loggedIn, isAdmin) {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            if (loggedIn) {
+                loginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+            } else {
+                loginBtn.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+            }
+        }
+
+        function checkUserRole(user) {
+            if (firebaseInitialized) {
+                firebase.database().ref(`users/${user.uid}/role`).once('value')
+                    .then((snapshot) => {
+                        const role = snapshot.val();
+                        if (role === 'admin') {
+                            showSection('admin');
+                            updateNavButtons(true, true);
+                        } else {
+                            showSection('student');
+                            updateNavButtons(true, false);
+                        }
+                    });
+            }
+        }
+
+        // ==================== Student Dashboard ====================
+        function loadStudentProgress() {
+            if (!firebaseInitialized || !currentUser) return;
+            
+            const coursesList = document.getElementById('studentCoursesList');
+            let html = '';
+            
+            Object.keys(coursesData).forEach(courseType => {
+                const course = coursesData[courseType];
+                const title = course.title;
+                const icon = course.icon;
+                
+                html += `
+                    <div class="lesson-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>
+                                    <i class="fas ${icon} ms-2" style="color: #667eea;"></i>
+                                    ${title}
+                                </h5>
+                                <p class="text-muted mb-2">تقدمك في هذه الدورة</p>
+                            </div>
+                            <button class="btn btn-primary-custom" onclick="selectCourse('${courseType}')">
+                                <i class="fas fa-arrow-left ms-2"></i>
+                                متابعة
+                            </button>
+                        </div>
+                        <div class="progress mt-3" style="height: 8px;">
+                            <div class="progress-bar progress-bar-custom" style="width: ${Math.floor(Math.random() * 100)}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            coursesList.innerHTML = html;
+        }
+
+        // ==================== Admin Dashboard ====================
+        function showAdminTab(tab) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active'));
+            
+            if (tab === 'overview') {
+                document.getElementById('adminOverview').classList.remove('hidden');
+            } else if (tab === 'students') {
+                document.getElementById('adminStudents').classList.remove('hidden');
+            } else if (tab === 'content') {
+                document.getElementById('adminContent').classList.remove('hidden');
+                loadCurrentContent();
+            } else if (tab === 'analytics') {
+                document.getElementById('adminAnalytics').classList.remove('hidden');
+            }
+            
+            event.target.classList.add('active');
+        }
+
+        function handleAddContent(event) {
+            event.preventDefault();
+            
+            const course = document.getElementById('courseSelect').value;
+            const title = document.getElementById('lessonTitle').value;
+            const content = document.getElementById('lessonContent').value;
+            const duration = document.getElementById('lessonDuration').value;
+            
+            if (!firebaseInitialized) {
+                const toast = document.createElement('div');
+                toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-warning shadow-lg';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = '<i class="fas fa-exclamation-triangle ms-2"></i> يرجى إضافة إعدادات Firebase أولاً';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+                return;
+            }
+            
+            firebase.database().ref(`courses/${course}/lessons`).push({
+                title,
+                content,
+                duration,
+                createdAt: Date.now()
+            }).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'position-fixed top-0 start-50 translate-middle-x mt-5 alert alert-success shadow-lg';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = '<i class="fas fa-check-circle ms-2"></i> تم إضافة الدرس بنجاح!';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+                
+                document.getElementById('contentForm').reset();
+                loadCurrentContent();
+            });
+        }
+
+        function loadCurrentContent() {
+            const contentList = document.getElementById('currentContentList');
+            let html = '<p class="text-muted">المحتوى المتاح حالياً:</p>';
+            
+            Object.keys(coursesData).forEach(courseType => {
+                const course = coursesData[courseType];
+                html += `
+                    <div class="lesson-item mb-3">
+                        <h6><i class="fas ${course.icon} ms-2"></i>${course.title}</h6>
+                        <p class="text-muted mb-0">
+                            ${course.lessons ? course.lessons.length + ' دروس' : course.grades.length + ' صفوف دراسية'}
+                        </p>
+                    </div>
+                `;
+            });
+            
+            contentList.innerHTML = html;
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b9272b2f340e191',t:'MTc2NzYxMDU3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
