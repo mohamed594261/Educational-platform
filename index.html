@@ -715,15 +715,28 @@
 
         // ==================== Firebase Configuration ====================
         // يرجى استبدال هذه القيم بإعدادات Firebase الخاصة بك
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCBBGHVE-QUW0tTeRyQTuXoegqzFZqXHBA",
+  authDomain: "educational-platform-9b6ae.firebaseapp.com",
+  databaseURL: "https://educational-platform-9b6ae-default-rtdb.firebaseio.com",
+  projectId: "educational-platform-9b6ae",
+  storageBucket: "educational-platform-9b6ae.firebasestorage.app",
+  messagingSenderId: "107612745222",
+  appId: "1:107612745222:web:e980fcfe210e476cbe1d87",
+  measurementId: "G-HW2F0R5RSR"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
         let firebaseInitialized = false;
         let currentUser = null;
