@@ -715,30 +715,16 @@
 
         // ==================== Firebase Configuration ====================
         // يرجى استبدال هذه القيم بإعدادات Firebase الخاصة بك
-       
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCBBGHVE-QUW0tTeRyQTuXoegqzFZqXHBA",
-    authDomain: "educational-platform-9b6ae.firebaseapp.com",
-    databaseURL: "https://educational-platform-9b6ae-default-rtdb.firebaseio.com",
-    projectId: "educational-platform-9b6ae",
-    storageBucket: "educational-platform-9b6ae.firebasestorage.app",
-    messagingSenderId: "107612745222",
-    appId: "1:107612745222:web:e980fcfe210e476cbe1d87",
-    measurementId: "G-HW2F0R5RSR"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // سطر الاختبار: يرسل رسالة ترحيبية لقاعدة البيانات فوراً
-  set(ref(db, 'connection_test'), {
-    message: "أهلاً بك! الربط من GitHub يعمل بنجاح",
-    timestamp: new Date().toString()
-  });
-
+       const firebaseConfig = {
+  apiKey: "AIzaSyCBBGHVE-QUW0tTeRyQTuXoegqzFZqXHBA",
+  authDomain: "educational-platform-9b6ae.firebaseapp.com",
+  databaseURL: "https://educational-platform-9b6ae-default-rtdb.firebaseio.com",
+  projectId: "educational-platform-9b6ae",
+  storageBucket: "educational-platform-9b6ae.firebasestorage.app",
+  messagingSenderId: "107612745222",
+  appId: "1:107612745222:web:4c4ab0b64c5dde75be1d87",
+  measurementId: "G-RQ7N58T2TY"
+};
 
         let firebaseInitialized = false;
         let currentUser = null;
